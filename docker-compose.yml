@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  cv:
+    image: "cv_template:latest"
+    build: .
+    container_name: cv
+    image: "cv_template:latest"
+    tty: true
+    volumes:
+      - ./src/:/data/cv/src/
+

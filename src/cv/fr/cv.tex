@@ -1,0 +1,18 @@
+\documentclass[10pt,a4paper]{moderncv}
+\moderncvtheme[blue]{classic}
+
+\usepackage[margin=1.55cm]{geometry}
+\input{../common/packages}
+\input{../common/main}
+\input{./sections/00_header}
+
+\begin{document}
+\sethintscolumnlength{3.02cm}
+\maketitle                      % Generate CV header
+\negativeMarginLarge            % Reduce space between header and first section if no quote
+
+\input{./sections/10_professional_experience}
+\input{./sections/20_education}
+\input{./sections/30_miscellaneous}
+
+\end{document}

@@ -1,0 +1,20 @@
+% Required to have modern socials icons
+\moderncvicons{awesome}
+
+% Allow fontawesome icons to have different sizes
+\DeclareFontFamily{U}{fontawesomeOne}{}
+\DeclareFontShape{U}{fontawesomeOne}{m}{n}
+  {<-> FontAwesome5--fontawesomeone}{}
+\DeclareRobustCommand\FAone{\fontencoding{U}\fontfamily{fontawesomeOne}\selectfont}
+\begin{document}
+
+
+% New color
+\definecolor{grey25}{RGB}{115,115,115}
+
+% New bullets point styles
+\newcommand*{\mainbullet}{\color{color1}{-}}
+\newcommand*{\secondarybullet}{\color{color1}{$\cdot$}}
+
+\renewcommand*{\mobilephonesymbol}{{\footnotesize \faIcon{mobile-alt}}~}
+\renewcommand*{\emailsymbol}{{\footnotesize \faIcon[regular]{envelope}}~}
