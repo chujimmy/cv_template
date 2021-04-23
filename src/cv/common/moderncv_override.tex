@@ -1,0 +1,11 @@
+% xpatchcmd allows to temporarily patch a command. It works the following way:
+% \xpatchcmd{<command to patch>}{<find>}{<replace>}{<success>}{<failure>}
+\xpatchcmd{\cventry}{\slshape#4}{#4}{}{}                                    % Removing italic for company name
+\xpatchcmd{\cventry}{.}{}{}{}                                               % Removing dot and the end of the first line
+\xpatchcmd{\cventry}{, #6}{\small{\hfill{\textcolor{grey25}{#6}}}}{}{}      % Aligning on the right #5 with smaller font and grey color
+
+% New command to have 2 columns of title / value on a single line
+\renewcommand{\cvcomputer}[4]{\cvdoubleitem{\textbf{#1}}{\small#2}{\textbf{#3}}{\small#4}}
+
+% New command to have duration time just below the timeline
+\newcommand*{\cventrydate}[3]{#1 \\ #2 \\ \negativeMarginTiny \ifnotempty{#3}{\textcolor{grey25}{\footnotesize{#3}}}{}}
