@@ -8,4 +8,5 @@
 \renewcommand{\cvcomputer}[4]{\cvdoubleitem{\textbf{#1}}{\small#2}{\textbf{#3}}{\small#4}}
 
 % New command to have duration time just below the timeline
-\newcommand*{\cventrydate}[3]{#1 \\ #2 \\ \negativeMarginTiny \ifnotempty{#3}{\textcolor{grey25}{\footnotesize{#3}}}{}}
+\newcommand*{\cventrydate}[2]{#1 \\ \negativeMarginTiny \textcolor{grey25}{\footnotesize#2}}
+\newcommand*{\cventrydatetwolines}[3]{#1 \ifnotempty{#2}{\\#2}{\\~} \\ \negativeMarginSmall \negativeMarginExtraSmall ~ \\ \textcolor{grey25}{\footnotesize#3}}
