@@ -5,6 +5,8 @@
 *.bbl
 *.blg
 *.dvi
+*.fdb_latexmk
+*.fls
 *.glg
 *.glo
 *.gls
@@ -19,10 +21,9 @@
 *.mtc
 *.mtc1
 *.out
+*.pdf
 *.ps
 *.synctex.gz
 *.toc
-*.pdf
-*.fdb_latexmk
-*.fls
+*.xdv
 .DS_store
