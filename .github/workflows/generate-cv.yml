@@ -58,9 +58,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cv
-          path: ${{ steps.output_set.outputs.output_folder }}
+          path: ${{ steps.output_set.outputs.output_folder }}/*
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 5
+      - name: Create zip
+        id: zip_create
+        run: |
+          zip -r -j cv.zip ${{ steps.output_set.outputs.output_folder }}/*
       - name: Create new tag
         id: tag_create
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
@@ -68,26 +72,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: false
-      - name: Create zip
-        run: |
-          zip -r -j cv.zip ${{ steps.output_set.outputs.output_folder }}/*
-      - name: Create Release
+      - name: Create release
         id: release_create
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.create_tag.outputs.new_tag }}
-          release_name: ${{ steps.create_tag.outputs.new_tag }}
-      - name: Upload CV
+          tag_name: ${{ steps.tag_create.outputs.new_tag }}
+          release_name: ${{ steps.tag_create.outputs.new_tag }}
+      - name: Upload CV to Asset
         id: cv_upload_asset
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.release_create.outputs.upload_url }}
           asset_path: ./cv.zip
           asset_name: cv.zip
           asset_content_type: application/zip
