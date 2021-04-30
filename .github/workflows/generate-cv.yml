@@ -46,20 +46,48 @@ jobs:
           mkdir -p ${{ steps.output_set.outputs.output_folder}} && 
           FILE_PATTERN=${{ steps.output_set.outputs.file_pattern}} &&
           FULL_NAME=${{ steps.output_set.outputs.first_name}}_${{ steps.output_set.outputs.last_name}} && 
-          echo $fFULL_NAME &&
           find . -name "$FILE_PATTERN.pdf" | while read FILE_NAME; do 
             [[ $FILE_NAME =~ .*/([a-z]*)/$FILE_PATTERN.pdf ]] 
             LANG=${BASH_REMATCH[1]}
             NEW_FILE_NAME="${FILE_PATTERN}_${FULL_NAME}_${LANG}_${{ steps.output_set.outputs.file_date }}.pdf"
             cp $FILE_NAME ./${{ steps.output_set.outputs.output_folder}}/${NEW_FILE_NAME,,}
-            ls -al .
           done
       - name: Upload CV to Artifact
         id: cv_upload_artifact
-        # if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/upload-artifact@v2
         with:
           name: cv
           path: ${{ steps.output_set.outputs.output_folder }}
           if-no-files-found: error
           retention-days: 1
+      - name: Create new tag
+        id: tag_create
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: anothrNick/github-tag-action@1.17.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: false
+      - name: Create zip
+        run: |
+          zip -r -j cv.zip ${{ steps.output_set.outputs.output_folder }}/*
+      - name: Create Release
+        id: release_create
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.new_tag }}
+          release_name: ${{ steps.create_tag.outputs.new_tag }}
+      - name: Upload CV
+        id: cv_upload_asset
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cv.zip
+          asset_name: cv.zip
+          asset_content_type: application/zip
