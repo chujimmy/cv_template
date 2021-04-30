@@ -10,3 +10,8 @@ services:
     tty: true
     entrypoint: /bin/sh -c
     command: "/data/entrypoint.sh"
+    environment:
+      FILE_PATTERN: "cv"
+      FIRST_NAME: "john"
+      LAST_NAME: "doe"
+      OUTPUT_FOLDER: "output"
