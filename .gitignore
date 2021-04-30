@@ -1,3 +1,4 @@
+.DS_store
 *.acn
 *.acr
 *.alg
@@ -26,4 +27,4 @@
 *.synctex.gz
 *.toc
 *.xdv
-.DS_store
+**/output

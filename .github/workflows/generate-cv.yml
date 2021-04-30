@@ -1,0 +1,65 @@
+name: Generate CVs
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github repository
+        id: github_checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - name: Run Docker container
+        id: docker_run
+        run: docker-compose up -d
+      - name: Set output
+        id: output_set
+        run: |
+          echo "::set-output name=file_date::$(date +'%Y_%m_%d')"
+          echo "::set-output name=file_pattern::$(docker exec cv bash -c 'echo $FILE_PATTERN')"
+          echo "::set-output name=first_name::$(docker exec cv bash -c 'echo $FIRST_NAME')"
+          echo "::set-output name=last_name::$(docker exec cv bash -c 'echo $LAST_NAME')"
+          echo "::set-output name=output_folder::$(docker exec cv bash -c 'echo $OUTPUT_FOLDER')"
+      - name: Generate CV
+        id: cv_generate
+        run: >
+          FILE_PATTERN=${{ steps.output_set.outputs.file_pattern}} &&
+          counter=0 &&
+          while [[ $(find . -name "$FILE_PATTERN.tex" | wc -l ) -gt $(find . -name "$FILE_PATTERN.pdf" | wc -l ) && $counter -le 60 ]]; do
+            echo "Waiting for pdf files to be generated..."
+            ((counter++))
+            sleep 1
+          done && 
+          if [[ $counter -gt 30 ]]; then
+            echo "Timeout while waiting pdf files to be generated. Abort"
+            exit 1
+          fi
+      - name: Prepare CV 
+        id: cv_prepare
+        run: >
+          mkdir -p ${{ steps.output_set.outputs.output_folder}} && 
+          FILE_PATTERN=${{ steps.output_set.outputs.file_pattern}} &&
+          FULL_NAME=${{ steps.output_set.outputs.first_name}}_${{ steps.output_set.outputs.last_name}} && 
+          echo $fFULL_NAME &&
+          find . -name "$FILE_PATTERN.pdf" | while read FILE_NAME; do 
+            [[ $FILE_NAME =~ .*/([a-z]*)/$FILE_PATTERN.pdf ]] 
+            LANG=${BASH_REMATCH[1]}
+            NEW_FILE_NAME="${FILE_PATTERN}_${FULL_NAME}_${LANG}_${{ steps.output_set.outputs.file_date }}.pdf"
+            cp $FILE_NAME ./${{ steps.output_set.outputs.output_folder}}/${NEW_FILE_NAME,,}
+            ls -al .
+          done
+      - name: Upload CV to Artifact
+        id: cv_upload_artifact
+        # if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: cv
+          path: ${{ steps.output_set.outputs.output_folder }}
+          if-no-files-found: error
+          retention-days: 1
