@@ -43,7 +43,15 @@
 }{}{}
 
 % Add extra line after extrainfo so height calculation is correct for details box with 2 liners extra info
-\xpatchcmd{\makecvhead}{\makenewline\@extrainfo}{\makenewline\@extrainfo\makenewline}{}{}
+\xpatchcmd{\makecvhead}{\makenewline\@extrainfo}{\makenewline\textnormal{\@extrainfo}\makenewline}{}{}
+
+% Remove address text format
+\xpatchcmd{\makecvhead}{\makenewline\addresssymbol\@addressstreet}{\ifthenelse{\isundefined{\@addressstreet}}{}{\makenewline\addresssymbol\textnormal{\@addressstreet}}}{}{}
+\xpatchcmd{\makecvhead}{\makenewline\@addresscity}{\ifthenelse{\equal{\@addresscity}{}}{}{\makenewline\textnormal{\@addresscity}}}{}{}
+\xpatchcmd{\makecvhead}{\makenewline\@addresscountry}{\ifthenelse{\equal{\@addresscountry}{}}{}{\makenewline\textnormal{\@addresscountry}}}{}{}
+
+% Remove phone text format
+\xpatchcmd{\makecvhead}{\csname\collectionloopkey phonesymbol\endcsname\collectionloopitem}{\csname\collectionloopkey phonesymbol\endcsname \textnormal{\collectionloopitem}}{}{}
 
 % New command to have 2 columns of title / value on a single line
 \renewcommand{\cvcomputer}[4]{\cvdoubleitem{\textbf{#1}}{\small#2}{\textbf{#3}}{\small#4}}
