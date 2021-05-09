@@ -1,13 +1,71 @@
 % xpatchcmd allows to temporarily patch a command. It works the following way:
 % \xpatchcmd{<command to patch>}{<find>}{<replace>}{<success>}{<failure>}
-\xpatchcmd{\cventry}{\slshape#4}{#4}{}{}                                    % Removing italic for company name
-\xpatchcmd{\cventry}{.}{}{}{}                                               % Removing dot and the end of the first line
-\xpatchcmd{\cventry}{, #6}{\small{\hfill{\textcolor{grey25}{#6}}}}{}{}      % Aligning on the right #5 with smaller font and grey color
+
+% Remove italic for company name for cventry
+\xpatchcmd{\cventry}{\slshape#4}{#4}{}{}
+
+% Remove dot and the end of the first line for cventry
+\xpatchcmd{\cventry}{.}{}{}{}
+
+% Align on the right #5 (used for contract type) with a smaller font and grey color for cventry
+\xpatchcmd{\cventry}{, #6}{\small{\hfill{\textcolor{grey25}{#6}}}}{}{}
+
+% Remove unecessary space when quote is not used
+\xpatchcmd{\makecvhead}{\usebox{\makecvheadnamebox}\fi \\[2.5em]}{\usebox{\makecvheadnamebox}\fi\\[-1em]}{}{}
+
+% Override name box: 
+% - ensure name is aligned with top 
+% - ensure position aligned with bottom 
+% - use normal text for position
+\xpatchcmd{\makecvhead}{\usebox{\makecvheadnamebox}}{
+    \begin{minipage}[b]{\makecvheadnamewidth}
+        \newsavebox{\nameBox}
+        \savebox{\nameBox}{\namestyle{\@firstname\ \@lastname}}
+        \hasBelowBaselineName{\@firstname\ \@lastname}
+
+        \if@left\raggedright\fi%
+        \if@right\raggedleft\fi%
+        \namestyle{\@firstname\ \@lastname}
+        \ifthenelse{\equal{\@title}{}}
+            {}
+            {
+                \ifthenelse{\nameContainsBelowBaselineChar>0}
+                    {\\[ 6em - \the\ht\nameBox - \baselineskip ]}
+                    {\\[ 6em - \the\ht\nameBox ]}
+                \titlestyle{\textnormal{\@title}}
+            }
+    \end{minipage}
+}{}{}
+
+% Inline all social links
+\xpatchcmd{\makecvhead}{\makenewline\csname\collectionloopkey socialsymbol\endcsname}{
+    \ifthenelse{\collectionloopid>0}{~·~}{\makenewline} \csname\collectionloopkey socialsymbol\endcsname
+}{}{}
+
+% Add extra line after extrainfo so height calculation is correct for details box with 2 liners extra info
+\xpatchcmd{\makecvhead}{\makenewline\@extrainfo}{\makenewline\@extrainfo\makenewline}{}{}
 
 % New command to have 2 columns of title / value on a single line
 \renewcommand{\cvcomputer}[4]{\cvdoubleitem{\textbf{#1}}{\small#2}{\textbf{#3}}{\small#4}}
 
-% New command to have duration time just below the timeline
+% Ensure position duration is just below the start and end date and centered with the company summary
 \newcommand*{\cventrydate}[2]{#1 \\ \negativeMarginTiny \textcolor{grey25}{\footnotesize#2}}
+% Display the position start and end date to be displayed on 2 lines
 \newcommand*{\cventrydatetwolines}[3]{#1 \ifnotempty{#2}{\\#2}{\\~} \\ \negativeMarginSmall \negativeMarginExtraSmall ~ \\ \textcolor{grey25}{\footnotesize#3}}
+% Allow linking company website
 \newcommand*{\cventryposition}[2]{\href{https://#2}{#1}}
+
+% This function is needed in order to keep the name aligned with the top left
+% and the position title aligned with the last line of the details block
+\newcommand*{\hasBelowBaselineName}[1]{
+    % This list is not necessary complete and should cover basic descenders (letters going below baseline)
+    % Feel free to upgrade this list to ensure all cases are handled
+    \def\charList{Ç,Q,ç,g,j,p,q,y}
+    \def\nameContainsBelowBaselineChar{0}
+
+    \foreach \char in \charList {
+        \IfSubStr{#1}{\char}
+            {\gdef\nameContainsBelowBaselineChar{1}}
+            {}
+    }
+}
