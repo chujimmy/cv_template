@@ -33,8 +33,8 @@ LANG_LOWER = $(shell echo $(LANG) | tr A-Z a-z)
 .PHONY: add-cv
 add-cv: 
 	$(call check_lang)
-	mkdir ./src/cv/$(LANG_LOWER)/
-	cp -a ./src/cv/base/. ./src/cv/$(LANG_LOWER)/
+	mkdir ./src/cv/lang/$(LANG_LOWER)/
+	cp -a ./src/template/cv/. ./src/cv/lang/$(LANG_LOWER)/
 
 .PHONY: remove-cv
 remove-cv: 
