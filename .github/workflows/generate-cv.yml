@@ -31,7 +31,7 @@ jobs:
         run: >
           FILE_PATTERN=${{ steps.output_set.outputs.file_pattern}} &&
           counter=0 &&
-          while [[ $(find . -regextype sed -regex ".*/[a-z]\{2\}/cv.tex" | wc -l ) -gt $(find . -name "$FILE_PATTERN.pdf" | wc -l ) && $counter -le 60 ]]; do
+          while [[ $(find . -regextype sed -regex ".*/lang/[a-z]\{2\}/cv.tex" | wc -l ) -gt $(find . -name "$FILE_PATTERN.pdf" | wc -l ) && $counter -le 60 ]]; do
             echo "Waiting for pdf files to be generated..."
             ((counter++))
             sleep 1
