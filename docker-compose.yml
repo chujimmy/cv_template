@@ -12,7 +12,8 @@ services:
     command: "/data/cv/entrypoint.sh"
     working_dir: /data/cv/
     environment:
-      FILE_PATTERN: "cv"
+      CV_FILE_PATTERN: "cv"
+      LETTER_FILE_PATTERN: "letter"
       FIRST_NAME: "john"
       LAST_NAME: "doe"
       OUTPUT_FOLDER: "output"
