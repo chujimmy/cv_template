@@ -1,0 +1,31 @@
+\newcommand*{\setCompanyName}[1]{\newcommand*{\companyName}{#1~}}
+\newcommand*{\setCompanyPosition}[1]{\newcommand*{\companyPosition}{#1~}}
+\newcommand*{\setCompanyInfo}[4]{\newcommand*{\companyInfo}{#1\\#2\\#3\\#4}}
+
+\renewcommand*{\addressfont}{\small\mdseries}
+
+\makeatletter
+\renewcommand*{\makeletterhead}{
+  \begin{minipage}{1\textwidth}
+    \if@details\raggedright\addressfont{
+      {\bfseries\upshape\@firstname~\@lastname}\@firstdetailselementfalse
+        \ifthenelse{\isundefined{\@addressstreet}}{}{\makenewline\addresssymbol\@addressstreet
+        \ifthenelse{\equal{\@addresscity}{}}{}{\makenewline\@addresscity}
+        \ifthenelse{\equal{\@addresscountry}{}}{}{\makenewline\@addresscountry}}
+    }\fi
+  \end{minipage}
+  \\[1em]
+
+  \begin{minipage}[t]{1\textwidth}
+    \raggedleft\addressfont
+    {\bfseries\upshape\@recipientname}\\
+    \@recipientaddress
+  \end{minipage}
+  \\[2em]
+
+  \raggedleft
+  \today
+  \\[2em]
+  \raggedright
+}
+\makeatother

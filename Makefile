@@ -39,4 +39,15 @@ add-cv:
 .PHONY: remove-cv
 remove-cv: 
 	$(call check_lang)
-	rm -rf ./src/cv/$(LANG_LOWER)/
+	rm -rf ./src/cv/lang/$(LANG_LOWER)/
+
+.PHONY: add-letter
+add-letter:
+	$(call check_lang)
+	mkdir ./src/letter/lang/$(LANG_LOWER)/
+	cp -a ./src/template/letter/. ./src/letter/lang/$(LANG_LOWER)/
+
+.PHONY: remove-letter
+remove-letter:
+	$(call check_lang)
+	rm -rf ./src/letter/lang/$(LANG_LOWER)/
