@@ -35,6 +35,7 @@ add-cv:
 	$(call check_lang)
 	mkdir ./src/cv/lang/$(LANG_LOWER)/
 	cp -a ./src/template/cv/. ./src/cv/lang/$(LANG_LOWER)/
+	docker exec cv bash -c -i "latexmk -pdf -pvc -file-line-error -view=none -interaction=nonstopmode -recorder -cd /data/cv/src/cv/lang/$(LANG_LOWER)/cv.tex > /proc/1/fd/1 2>/proc/1/fd/2 &"
 
 .PHONY: remove-cv
 remove-cv: 
@@ -46,8 +47,15 @@ add-letter:
 	$(call check_lang)
 	mkdir ./src/letter/lang/$(LANG_LOWER)/
 	cp -a ./src/template/letter/. ./src/letter/lang/$(LANG_LOWER)/
+	docker exec cv bash -c -i "latexmk -pdf -pvc -file-line-error -view=none -interaction=nonstopmode -recorder -cd /data/cv/src/letter/lang/$(LANG_LOWER)/letter.tex > /proc/1/fd/1 2>/proc/1/fd/2 &"
 
 .PHONY: remove-letter
 remove-letter:
 	$(call check_lang)
 	rm -rf ./src/letter/lang/$(LANG_LOWER)/
+
+.PHONY: add-lang
+add-lang: add-cv add-letter
+
+.PHONY: remove-lang
+remove-lang: remove-cv remove-letter
