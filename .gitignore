@@ -22,9 +22,9 @@
 *.mtc
 *.mtc1
 *.out
-*.pdf
 *.ps
 *.synctex.gz
 *.toc
 *.xdv
 **/output
+src/**/*.pdf
