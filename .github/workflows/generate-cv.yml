@@ -22,24 +22,22 @@ jobs:
         id: output_set
         run: |
           echo "::set-output name=file_date::$(date +'%Y_%m_%d')"
-          echo "::set-output name=cv_file_pattern::$(docker exec cv bash -c 'echo $CV_FILE_PATTERN')"
-          echo "::set-output name=letter_file_pattern::$(docker exec cv bash -c 'echo $LETTER_FILE_PATTERN')"
+          echo "::set-output name=cv_output_file_pattern::$(docker exec cv bash -c 'echo $CV_OUTPUT_FILE_PATTERN')"
+          echo "::set-output name=letter_output_file_pattern::$(docker exec cv bash -c 'echo $LETTER_OUTPUT_FILE_PATTERN')"
           echo "::set-output name=first_name::$(docker exec cv bash -c 'echo $FIRST_NAME')"
           echo "::set-output name=last_name::$(docker exec cv bash -c 'echo $LAST_NAME')"
           echo "::set-output name=output_folder::$(docker exec cv bash -c 'echo $OUTPUT_FOLDER')"
       - name: Generate files
         id: file_generate
         run: >
-          CV_FILE_PATTERN=${{ steps.output_set.outputs.cv_file_pattern}} &&
-          LETTER_FILE_PATTERN=${{ steps.output_set.outputs.letter_file_pattern}} &&
           cv_counter=0 &&
-          while [[ $(find . -regextype sed -regex ".*/lang/[a-z]\{2\}/cv.tex" | wc -l ) -gt $(find . -name "$CV_FILE_PATTERN.pdf" | wc -l ) && $cv_counter -le 60 ]]; do
+          while [[ $(find . -regextype sed -regex ".*/lang/[a-z]\{2\}/cv.tex" | wc -l ) -gt $(find . -name "cv.pdf" | wc -l ) && $cv_counter -le 60 ]]; do
             echo "Waiting for CVs pdf files to be generated..."
             ((cv_counter++))
             sleep 1
           done && 
           letter_counter=0 &&
-          while [[ $(find . -regextype sed -regex ".*/lang/[a-z]\{2\}/letter.tex" | wc -l ) -gt $(find . -name "$LETTER_FILE_PATTERN.pdf" | wc -l ) && $letter_counter -le 60 ]]; do
+          while [[ $(find . -regextype sed -regex ".*/lang/[a-z]\{2\}/letter.tex" | wc -l ) -gt $(find . -name "letter.pdf" | wc -l ) && $letter_counter -le 60 ]]; do
             echo "Waiting for cover letters pdf files to be generated..."
             ((letter_counter++))
             sleep 1
@@ -52,19 +50,19 @@ jobs:
         id: file_prepare
         run: >
           mkdir -p ${{ steps.output_set.outputs.output_folder}} && 
-          CV_FILE_PATTERN=${{ steps.output_set.outputs.cv_file_pattern}} &&
-          LETTER_FILE_PATTERN=${{ steps.output_set.outputs.letter_file_pattern}} &&
+          CV_OUTPUT_FILE_PATTERN=${{ steps.output_set.outputs.cv_output_file_pattern}} &&
+          LETTER_OUTPUT_FILE_PATTERN=${{ steps.output_set.outputs.letter_output_file_pattern}} &&
           FULL_NAME=${{ steps.output_set.outputs.first_name}}_${{ steps.output_set.outputs.last_name}} && 
-          find . -name "$CV_FILE_PATTERN.pdf" | while read FILE_NAME; do 
-            [[ $FILE_NAME =~ .*/([a-z]*)/$CV_FILE_PATTERN.pdf ]] 
+          find . -name "cv.pdf" | while read FILE_NAME; do
+            [[ $FILE_NAME =~ .*/([a-z]*)/cv.pdf ]]
             LANG=${BASH_REMATCH[1]}
-            NEW_FILE_NAME="${LANG}_${CV_FILE_PATTERN}_${FULL_NAME}_${{ steps.output_set.outputs.file_date }}.pdf"
+            NEW_FILE_NAME="${LANG}_${CV_OUTPUT_FILE_PATTERN}_${FULL_NAME}_${{ steps.output_set.outputs.file_date }}.pdf"
             cp $FILE_NAME ./${{ steps.output_set.outputs.output_folder}}/${NEW_FILE_NAME,,}
           done &&
-          find . -name "$LETTER_FILE_PATTERN.pdf" | while read FILE_NAME; do 
-            [[ $FILE_NAME =~ .*/([a-z]*)/$LETTER_FILE_PATTERN.pdf ]] 
+          find . -name "letter.pdf" | while read FILE_NAME; do
+            [[ $FILE_NAME =~ .*/([a-z]*)/letter.pdf ]]
             LANG=${BASH_REMATCH[1]}
-            NEW_FILE_NAME="${LANG}_${LETTER_FILE_PATTERN}_${FULL_NAME}_${{ steps.output_set.outputs.file_date }}.pdf"
+            NEW_FILE_NAME="${LANG}_${LETTER_OUTPUT_FILE_PATTERN}_${FULL_NAME}_${{ steps.output_set.outputs.file_date }}.pdf"
             cp $FILE_NAME ./${{ steps.output_set.outputs.output_folder}}/${NEW_FILE_NAME,,}
           done
       - name: Upload File to Artifact
