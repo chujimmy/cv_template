@@ -3,10 +3,10 @@ Easy-to-use Docker application, based on LaTeX and a customised moderncv library
 
 This is a GitHub template repository, feel free to use it and adapt it to your use case.
 
-## CV
+### CV
 [![CV](https://raw.githubusercontent.com/chujimmy/cv_template/main/example/cv_example.png)](https://raw.githubusercontent.com/chujimmy/cv_template/main/example/cv_example.pdf)
 
-## Cover Letter
+### Cover Letter
 [![Cover Letter](https://raw.githubusercontent.com/chujimmy/cv_template/main/example/cover_letter_example.png)](https://raw.githubusercontent.com/chujimmy/cv_template/main/example/cover_letter_example.pdf)
 
 # How to use
@@ -72,5 +72,5 @@ However some commands were overridden (to match my personal preference) and new 
 Comments were added in order to give more context and information about new or overridden commands.
 
 # Usefull resources
-https://ctan.org/pkg/moderncv 
-https://mg.readthedocs.io/latexmk.html
+- https://ctan.org/pkg/moderncv 
+- https://mg.readthedocs.io/latexmk.html
