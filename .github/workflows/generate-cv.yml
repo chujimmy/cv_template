@@ -17,7 +17,7 @@ jobs:
           fetch-depth: "0"
       - name: Run Docker container
         id: docker_run
-        run: docker-compose up -d
+        run: docker-compose up -d --force-recreate
       - name: Set output
         id: output_set
         run: |
@@ -42,7 +42,7 @@ jobs:
             ((letter_counter++))
             sleep 1
           done && 
-          if [[ $counter -gt 30 ]]; then
+          if [[ $cv_counter -ge 60 && $letter_counter -ge 60 ]]; then
             echo "Timeout while waiting pdf files to be generated. Abort"
             exit 1
           fi
