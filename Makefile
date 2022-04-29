@@ -8,7 +8,7 @@ endef
 
 .PHONY: start
 start:
-	docker-compose up 
+	docker-compose up --force-recreate
 
 
 .PHONY: stop
@@ -23,7 +23,7 @@ clean:
 
 .PHONY: clean-pdf
 clean-pdf: 
-	find . -name '*.pdf' -delete
+	find src -name '*.pdf' -delete
 
 
 .PHONY: clean-all
