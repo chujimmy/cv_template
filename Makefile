@@ -8,6 +8,7 @@ endef
 
 .PHONY: start
 start:
+	docker image prune -f
 	docker-compose up --force-recreate
 
 
