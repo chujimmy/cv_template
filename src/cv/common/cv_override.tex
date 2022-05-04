@@ -11,7 +11,7 @@
 \xpatchcmd{\cventry}{, #6}{\small{\hfill{\textcolor{grey25}{#6}}}}{}{}
 
 % Remove unecessary space when quote is not used
-\xpatchcmd{\makecvhead}{\usebox{\makecvheadnamebox}\fi \\[2.5em]}{\usebox{\makecvheadnamebox}\fi\\[-1em]}{}{}
+\xpatchcmd{\makecvhead}{\usebox{\makecvheadnamebox}\fi \\[2.5em]}{\usebox{\makecvheadnamebox}\fi\\[-2em]}{}{}
 
 % Override name box: 
 % - ensure name is aligned with top 
@@ -30,9 +30,9 @@
             {}
             {
                 \ifthenelse{\nameContainsBelowBaselineChar>0}
-                    {\\[ 6em - \the\ht\nameBox - \baselineskip ]}
-                    {\\[ 6em - \the\ht\nameBox ]}
-                \titlestyle{\textnormal{\@title}}
+                    {\\[ 2em - \baselineskip ] \newline}
+                    {\\[ 2em ] \newline}
+                \titlestyle{\textnormal{\@title}} \\ \small{ }
             }
     \end{minipage}
 }{}{}
