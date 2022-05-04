@@ -21,19 +21,13 @@
     \begin{minipage}[b]{\makecvheadnamewidth}
         \newsavebox{\nameBox}
         \savebox{\nameBox}{\namestyle{\@firstname\ \@lastname}}
-        \hasBelowBaselineName{\@firstname\ \@lastname}
 
         \if@left\raggedright\fi%
         \if@right\raggedleft\fi%
         \namestyle{\@firstname\ \@lastname}
         \ifthenelse{\equal{\@title}{}}
             {}
-            {
-                \ifthenelse{\nameContainsBelowBaselineChar>0}
-                    {\\[ 2em - \baselineskip ] \newline}
-                    {\\[ 2em ] \newline}
-                \titlestyle{\textnormal{\@title}} \\ \small{ }
-            }
+            {{\\[ 2em ] \newline} \titlestyle{\textnormal{\@title}} \\ \small{ }}
     \end{minipage}
 }{}{}
 
@@ -62,18 +56,3 @@
 \newcommand*{\cventrydatetwolines}[3]{#1 \ifnotempty{#2}{\\#2}{\\~} \\ \negativeMarginSmall \negativeMarginExtraSmall ~ \\ \textcolor{grey25}{\footnotesize#3}}
 % Allow linking company website
 \newcommand*{\cventryposition}[2]{\href{https://#2}{#1}}
-
-% This function is needed in order to keep the name aligned with the top left
-% and the position title aligned with the last line of the details block
-\newcommand*{\hasBelowBaselineName}[1]{
-    % This list is not necessary complete and should cover basic descenders (letters going below baseline)
-    % Feel free to upgrade this list to ensure all cases are handled
-    \def\charList{g,j,p,q,y}
-    \def\nameContainsBelowBaselineChar{0}
-
-    \foreach \char in \charList {
-        \IfSubStr{#1}{\char}
-            {\gdef\nameContainsBelowBaselineChar{1}}
-            {}
-    }
-}
