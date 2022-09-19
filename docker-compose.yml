@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   cv:
-    image: "chujimmy/moderncv:1.8.0"
+    image: "ghcr.io/chujimmy/moderncv:1.12.0"
     container_name: cv
     volumes:
       - ./src/:/data/cv/src/
