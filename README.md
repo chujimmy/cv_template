@@ -16,6 +16,8 @@ This is a GitHub template repository, feel free to use it and adapt it to your u
 ## Getting started
 - Use this template to create your own repository: https://github.com/chujimmy/cv_template/generate
 - Checkout your newly created repository
+- Update environment variables in the `docker-compose.yml` file accordingly
+- Fill the CVs with your experiences
 
 ## Run the container
 `make start` will download and build the Docker image and then start the container. It will automatically find all `cv.tex` and `letter.tex` files located in the correct folders (respectively `./src/cv/lang/<lang>/cv.tex` and `./src/letter/lang/<lang>/letter.tex`), compile them to generate the pdf files and watch them, so they will be automatically recompiled on update.

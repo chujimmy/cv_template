@@ -55,4 +55,4 @@
 % Display the position start and end date to be displayed on 2 lines
 \newcommand*{\cventrydatetwolines}[3]{#1 \ifnotempty{#2}{\\#2}{\\~} \\ \negativeMarginSmall \negativeMarginExtraSmall ~ \\ \textcolor{grey25}{\footnotesize#3}}
 % Allow linking company website
-\newcommand*{\cventryposition}[2]{\href{https://#2}{#1}}
+\newcommand*{\cventryposition}[2]{\ifnotempty{#2}{\href{https://#2}{#1}}{#1}}
