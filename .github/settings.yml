@@ -1,0 +1,28 @@
+repository:
+  name: cv_template
+  description: Template for LaTeX with moderncv Docker container, to build and create seamlessly CVs and cover letters 
+  topics: docker, template, latex, moderncv
+
+  has_projects: false
+  has_wiki: false
+
+  default_branch: main
+
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  allow_squash_merge: true
+  delete_branch_on_merge: true
+
+
+branches:
+  - name: main
+    protection:
+      enforce_admins: false
+      required_conversation_resolution: true
+      required_pull_request_reviews:
+        dismiss_stale_reviews: true
+        dismissal_restrictions: {}
+        required_approving_review_count: 1
+      required_status_checks:
+        strict: true
+      restrictions: null
