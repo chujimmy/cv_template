@@ -16,10 +16,10 @@ repository:
 labels:
   - name: bug
     color: "#cc0000"
-    description: Bug
+    description: Issue in the application
   - name: stale
     color: "#ff7f00"
-    description: Stale
+    description: Stale Pull Request
 
 
 branches:
