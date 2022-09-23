@@ -13,6 +13,14 @@ repository:
   allow_squash_merge: true
   delete_branch_on_merge: true
 
+labels:
+  - name: bug
+    color: "#cc0000"
+    description: Bug
+  - name: stale
+    color: "#ff7f00"
+    description: Stale
+
 
 branches:
   - name: main
