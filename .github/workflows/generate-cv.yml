@@ -21,12 +21,12 @@ jobs:
       - name: Set output
         id: output_set
         run: |
-          echo "::set-output name=file_date::$(date +'%Y_%m_%d')"
-          echo "::set-output name=cv_output_file_pattern::$(docker exec cv bash -c 'echo $CV_OUTPUT_FILE_PATTERN')"
-          echo "::set-output name=letter_output_file_pattern::$(docker exec cv bash -c 'echo $LETTER_OUTPUT_FILE_PATTERN')"
-          echo "::set-output name=first_name::$(docker exec cv bash -c 'echo $FIRST_NAME')"
-          echo "::set-output name=last_name::$(docker exec cv bash -c 'echo $LAST_NAME')"
-          echo "::set-output name=output_folder::$(docker exec cv bash -c 'echo $OUTPUT_FOLDER')"
+          echo "file_date=$(date +'%Y_%m_%d')" >> $GITHUB_OUTPUT
+          echo "cv_output_file_pattern=$(docker exec cv bash -c 'echo $CV_OUTPUT_FILE_PATTERN')" >> $GITHUB_OUTPUT
+          echo "letter_output_file_pattern=$(docker exec cv bash -c 'echo $LETTER_OUTPUT_FILE_PATTERN')" >> $GITHUB_OUTPUT
+          echo "first_name=$(docker exec cv bash -c 'echo $FIRST_NAME')" >> $GITHUB_OUTPUT
+          echo "last_name=$(docker exec cv bash -c 'echo $LAST_NAME')" >> $GITHUB_OUTPUT
+          echo "output_folder=$(docker exec cv bash -c 'echo $OUTPUT_FOLDER')" >> $GITHUB_OUTPUT
       - name: Generate files
         id: file_generate
         run: >
