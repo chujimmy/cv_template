@@ -17,7 +17,7 @@ jobs:
           fetch-depth: "0"
       - name: Run Docker container
         id: docker_run
-        run: docker-compose up -d --force-recreate
+        run: docker compose up -d --force-recreate
       - name: Set output
         id: output_set
         run: |
@@ -68,7 +68,7 @@ jobs:
       - name: Upload File to Artifact
         id: file_upload_artifact
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cv
           path: ${{ steps.output_set.outputs.output_folder }}/*
